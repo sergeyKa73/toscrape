@@ -18,9 +18,7 @@ def get_books(content):
             'title': title,
             'price': price
         }
-
         books_data.append(book_dict)
-
     return books_data
 
 
@@ -37,20 +35,22 @@ final_data = []
 page_number = 1
 url = 'http://books.toscrape.com/catalogue/page-1.html'
 get_html = requests.get(url)
+
 if get_html.status_code == 200:
+    while True:
+        books = get_books(get_html.content)
+        print(f'получено{len(books)} с {page_number} страницы')
+        final_data += books
 
-    books = get_books(get_html.content)
-    print(f'получено{len(books)} с {page_number} страницы')
-    final_data += books
+        next_page = get_next_page(get_html.content)
+        if next_page:
+            page_number += 1
+            get_html = requests.get(next_page)
+            if get_html.status_code == 200:
+                print(f'начинаеи парсить {page_number}')
+            else:
+                pass
 
-    next_page = get_next_page(get_html.content)
-    if next_page:
-        page_number += 1
-        get_html = requests.get(next_page)
-        if get_html.status_code == 200:
-            print(f'начинаеи парсить {page_number}')
-        else:
-            pass
 print(f'Данные спарсились {page_number} страниц , {len(final_data)} книг')
 
 
