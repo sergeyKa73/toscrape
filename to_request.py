@@ -33,6 +33,7 @@ def get_content(html):
 
     return cards
 
+# Сохраняем в файл
 def save_doc(items, path):
     with open(path, 'w', newline='') as file:
         writer = csv.writer(file, delimiter=';')
